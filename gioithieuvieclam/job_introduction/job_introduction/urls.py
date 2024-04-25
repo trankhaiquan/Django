@@ -22,8 +22,6 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 
-# ... (các URL pattern khác) ...
-
 schema_view = get_schema_view(
     openapi.Info(
         title="Job Introduction API",
@@ -35,7 +33,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-
+    path('', include('job_intro.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('job_intro.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

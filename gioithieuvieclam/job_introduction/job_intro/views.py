@@ -5,6 +5,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .filters import JobFilter
 from .models import Job, Application
+from .permissions import IsEmployerOrReadOnly
 from .serializers import JobSerializer, ApplicationSerializer
 
 from django.http import JsonResponse
@@ -12,6 +13,18 @@ from django.http import JsonResponse
 from rest_framework import viewsets, permissions
 from .models import Job
 from .serializers import JobSerializer
+
+from django.contrib.auth import get_user_model
+from .serializers import UserSerializer
+
+from .models import Employer
+from .serializers import EmployerSerializer
+
+from .models import Applicant
+from .serializers import ApplicantSerializer
+
+from .models import Rating
+from .serializers import RatingSerializer
 
 
 def home(request):
@@ -26,7 +39,32 @@ class JobPagination(PageNumberPagination):
 class MyTokenObtainPairView(TokenObtainPairView):
     pass
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
 
+    def get_permissions(self):
+        if self.action == 'list':
+            permission_classes = [permissions.IsAdminUser]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class EmployerViewSet(viewsets.ModelViewSet):
+    queryset = Employer.objects.all()
+    serializer_class = EmployerSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsEmployerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class ApplicantViewSet(viewsets.ModelViewSet):
+    queryset = Applicant.objects.all()
+    serializer_class = ApplicantSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
@@ -62,3 +100,10 @@ class JobApplicationsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         job_id = self.kwargs['job_pk']
         return Application.objects.filter(job_id=job_id)
+
+class RatingViewSet(viewsets.ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(applicant=self.request.user.applicant)
