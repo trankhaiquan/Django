@@ -60,6 +60,7 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+
 class Application(models.Model):
     STATUS_CHOICES = (
         ('submitted', 'Đã nộp'),

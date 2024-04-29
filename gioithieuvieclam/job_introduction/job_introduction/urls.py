@@ -20,6 +20,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from oauth2_provider.urls import base_urlpatterns
 
 
 schema_view = get_schema_view(
@@ -36,6 +37,9 @@ urlpatterns = [
     path('', include('job_intro.urls')),
     path('admin/', admin.site.urls),
     path('api/', include('job_intro.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from .views import MyTokenObtainPairView
+# from .views import MyTokenObtainPairView
 from .views import JobViewSet, ApplicationViewSet, JobApplicationsViewSet
 
 
@@ -16,5 +16,6 @@ router.register(r'ratings', views.RatingViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    # path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
