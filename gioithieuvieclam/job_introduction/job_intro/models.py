@@ -1,9 +1,10 @@
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 
-# Create your models here.
 
+# Create your models here.
 
 
 class User(AbstractUser):
@@ -13,7 +14,7 @@ class User(AbstractUser):
         ('applicant', 'Ứng viên'),
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    avatar = models.ImageField(upload_to='avatars/', blank=True)
+    avatar = models.ImageField(upload_to='avatars/%Y/%m', blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='%(app_label)s_%(class)s_groups',
@@ -24,27 +25,62 @@ class User(AbstractUser):
         related_name='%(app_label)s_%(class)s_permissions',
         blank=True,
     )
-class Employer(models.Model):
+
+
+class BaseModel(models.Model):
+    """
+    BaseModel với các trường created_date, updated_date và active
+    """
+    created_date = models.DateField(auto_now_add=True)
+    updated_date = models.DateField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        abstract = True
+        ordering = ['id']
+
+
+class Profile(BaseModel):
+    """
+    Lưu trữ thông tin chung cho cả nhà tuyển dụng và ứng viên
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/%Y/%m')
+    full_name = models.CharField(max_length=255)
+    bio = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.full_name  # Trả về tên đầy đủ
+class Employer(BaseModel):  # Kế thừa BaseModel
+    """
+    Lưu trữ thông tin chi tiết của nhà tuyển dụng
+    """
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True)
     company_name = models.CharField(max_length=255)
     company_description = models.TextField()
+    logo = models.ImageField(upload_to='logos/%Y/%m', blank=True)
     website = models.URLField(blank=True)
     is_approved = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
 
     def __str__(self):
         return self.company_name
-class Applicant(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
+class Applicant(BaseModel):  # Kế thừa BaseModel
+    """
+    Lưu trữ thông tin chi tiết của ứng viên
+    """
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True)
     cv = models.FileField(upload_to='cvs/', blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
     skills = models.TextField(blank=True)
     experience = models.TextField(blank=True)
 
     def __str__(self):
-        return self.full_name
-
+        if self.profile:  # Kiểm tra xem profile có tồn tại hay không
+            return self.profile.full_name  # Trả về tên đầy đủ từ profile
+        else:
+            return "Applicant without profile"
 class Job(models.Model):
-
     employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = RichTextField()
@@ -57,9 +93,11 @@ class Job(models.Model):
         ('part-time', 'Bán thời gian'),
         ('internship', 'Thực tập'),
     )
+    job_type = models.CharField(max_length=20, choices=JOB_TYPE_CHOICES)  # Thêm trường job_type
 
     def __str__(self):
         return self.title
+
 
 class Application(models.Model):
     STATUS_CHOICES = (
@@ -76,6 +114,10 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.applicant} - {self.job}"
+
+
+
+
 
 class Rating(models.Model):
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)

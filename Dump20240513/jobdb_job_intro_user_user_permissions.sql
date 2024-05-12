@@ -16,31 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_group_permissions`
+-- Table structure for table `job_intro_user_user_permissions`
 --
 
-DROP TABLE IF EXISTS `auth_group_permissions`;
+DROP TABLE IF EXISTS `job_intro_user_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_group_permissions` (
+CREATE TABLE `job_intro_user_user_permissions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `group_id` int NOT NULL,
+  `user_id` bigint NOT NULL,
   `permission_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
-  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+  UNIQUE KEY `job_intro_user_user_perm_user_id_permission_id_a5047c90_uniq` (`user_id`,`permission_id`),
+  KEY `job_intro_user_user__permission_id_fa8162d8_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `job_intro_user_user__permission_id_fa8162d8_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `job_intro_user_user__user_id_bd26368b_fk_job_intro` FOREIGN KEY (`user_id`) REFERENCES `job_intro_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_group_permissions`
+-- Dumping data for table `job_intro_user_user_permissions`
 --
 
-LOCK TABLES `auth_group_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+LOCK TABLES `job_intro_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `job_intro_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_intro_user_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-25 17:27:20
+-- Dump completed on 2024-05-13  3:16:19

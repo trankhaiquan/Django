@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-hx3a!xjyl4cnuyxpb0jor4piqw#2axng!pxrsgzrf(w!$f*l0f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'job_intro.apps.JobIntroConfig',
+    'oauth2_provider',
     'ckeditor',
+    'debug_toolbar',
     'ckeditor_uploader',
     'drf_yasg',
 
@@ -45,16 +47,17 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'rest_framework.authtoken',
-    'oauth2_provider',
 
 ]
 
-# OAUTH2_PROVIDER = {
-#     'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,
-#     'REFRESH_TOKEN_EXPIRE_SECONDS': 1209600,
-#     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
-#
-# }
+OAUTH2_PROVIDER = {
+    'GRANT_TYPE_CLASSES': (
+        'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
+        'oauth2_provider.oauth2_grants.password.PasswordGrant',
+        # ...
+    ),
+    'APPLICATION_NAME': 'job_introduction'
+}
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -64,11 +67,18 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication'
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication'
 
     )
 }
+
+AUTH_USER_MODEL = 'job_intro.User'  # Thay thế 'your_app_name' bằng tên ứng dụng của bạn
+
+AUTHENTICATION_BACKENDS = (
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -81,11 +91,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:19002',  # Thay thế bằng URL của frontend
+    'exp://cfitzju-anonymous-8081.exp.direct',  # Thay thế bằng URL của frontend
 ]
 
 CORS_ALLOW_METHODS = [
@@ -182,3 +193,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLIENT_ID = 'lta3CjvdK8ggGU3xRq7YJp2y2n5tPyT1tI15nDDQ'
+CLIENT_SECRET = 'it3YPnNPn1JKWiFzoZFZ2UuRxyGKKDgoJxJPIuOSqW2TUwgvPo24XXFlCy4gJ8kzV7SfG6CR4ivUjmctIjk6LsC2i5feGiRPvU5MEjj1IUul6EGU9Sv4SMJfDdqUAIkl'

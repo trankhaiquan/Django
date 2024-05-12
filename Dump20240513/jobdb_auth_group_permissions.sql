@@ -16,29 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `django_session`
+-- Table structure for table `auth_group_permissions`
 --
 
-DROP TABLE IF EXISTS `django_session`;
+DROP TABLE IF EXISTS `auth_group_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `django_session` (
-  `session_key` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `session_data` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expire_date` datetime(6) NOT NULL,
-  PRIMARY KEY (`session_key`),
-  KEY `django_session_expire_date_a5c62663` (`expire_date`)
+CREATE TABLE `auth_group_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `django_session`
+-- Dumping data for table `auth_group_permissions`
 --
 
-LOCK TABLES `django_session` WRITE;
-/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('qwzeaivh9a7mo5j9wu8902nv28xkvsi5','.eJxVjMsOwiAQRf-FtSGFWh4u3fcbyAwzSNVAUtqV8d-VpAvd3nPOfYkA-5bD3ngNC4mLUOL0uyHEB5cO6A7lVmWsZVsXlF2RB21yrsTP6-H-HWRoudeTBk48WI0R7IjeuGiUspogGWRGG8cvHBHOmhRH652mafDoMBGSEe8PBm846w:1rweQs:Mm3tpcWH34Zyzp_72qvtmC_QKMKsCI8wbvbgabBtD0g','2024-04-30 08:44:50.748018'),('z13iginpwmln7gdeaxtbdkikyfljp5wu','.eJxVjMsOwiAQRf-FtSGFWh4u3fcbyAwzSNVAUtqV8d-VpAvd3nPOfYkA-5bD3ngNC4mLUOL0uyHEB5cO6A7lVmWsZVsXlF2RB21yrsTP6-H-HWRoudeTBk48WI0R7IjeuGiUspogGWRGG8cvHBHOmhRH652mafDoMBGSEe8PBm846w:1ryqGq:xHhggqDLiKyj9quhvlLZXx3vkB6cvZ42MQf_WlsCvVU','2024-05-06 09:47:32.976521');
-/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-25 17:27:19
+-- Dump completed on 2024-05-13  3:16:17

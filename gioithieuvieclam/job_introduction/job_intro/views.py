@@ -27,6 +27,9 @@ from .serializers import RatingSerializer
 
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 def home(request):
@@ -38,6 +41,13 @@ class JobPagination(PageNumberPagination):
     page_size = 20
 
 
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -16,31 +16,42 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_user_groups`
+-- Table structure for table `oauth2_provider_grant`
 --
 
-DROP TABLE IF EXISTS `auth_user_groups`;
+DROP TABLE IF EXISTS `oauth2_provider_grant`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_user_groups` (
+CREATE TABLE `oauth2_provider_grant` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `group_id` int NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expires` datetime(6) NOT NULL,
+  `redirect_uri` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `scope` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `application_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  `created` datetime(6) NOT NULL,
+  `updated` datetime(6) NOT NULL,
+  `code_challenge` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code_challenge_method` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nonce` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `claims` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT (_utf8mb3''),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
-  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
-  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+  UNIQUE KEY `code` (`code`),
+  KEY `oauth2_provider_gran_application_id_81923564_fk_oauth2_pr` (`application_id`),
+  KEY `oauth2_provider_grant_user_id_e8f62af8_fk_job_intro_user_id` (`user_id`),
+  CONSTRAINT `oauth2_provider_gran_application_id_81923564_fk_oauth2_pr` FOREIGN KEY (`application_id`) REFERENCES `oauth2_provider_application` (`id`),
+  CONSTRAINT `oauth2_provider_grant_user_id_e8f62af8_fk_job_intro_user_id` FOREIGN KEY (`user_id`) REFERENCES `job_intro_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_user_groups`
+-- Dumping data for table `oauth2_provider_grant`
 --
 
-LOCK TABLES `auth_user_groups` WRITE;
-/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+LOCK TABLES `oauth2_provider_grant` WRITE;
+/*!40000 ALTER TABLE `oauth2_provider_grant` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth2_provider_grant` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-25 17:27:21
+-- Dump completed on 2024-05-13  3:16:17

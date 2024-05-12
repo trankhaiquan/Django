@@ -3,7 +3,7 @@ from rest_framework import routers
 from . import views
 # from .views import MyTokenObtainPairView
 from .views import JobViewSet, ApplicationViewSet, JobApplicationsViewSet
-
+from .views import CurrentUserView
 
 router = routers.DefaultRouter()
 router.register(r'jobs', views.JobViewSet)
@@ -15,7 +15,9 @@ router.register(r'users', views.UserViewSet)
 router.register(r'ratings', views.RatingViewSet)
 
 urlpatterns = [
+    path('users/me/', CurrentUserView.as_view(), name='current_user'),
     path('', include(router.urls)),
+
 
     # path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
